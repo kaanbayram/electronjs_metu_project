@@ -1,0 +1,14 @@
+{
+  "name": "workspace_electron",
+  "version": "1.0.0",
+  "description": "electron app",
+  "main": "main.js",
+  "author": "kaanbayram",
+  "license": "MIT",
+  "devDependencies": {
+    "electron":"^18.2.0"
+  },
+  "scripts": {
+    "start":"electron ."
+  }
+}
