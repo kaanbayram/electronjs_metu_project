@@ -1,0 +1,102 @@
+.tableContainer {
+    height: 500px;
+    width: 1000px;
+    overflow: auto;
+    border-style: solid;
+    border-color: black;
+    border-width: 0.5px;
+    border-radius: 1px;
+}
+
+.tableStyles {
+    border-collapse: collapse;
+}
+
+table,
+th,
+td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+.inputContainerStyles {
+    display: flex;
+    margin-left: -30px;
+}
+
+.gridAboveButtonContainer {
+    height: 30px;
+    width: 1000px;
+    display: flex;
+    justify-content: space-between;
+
+    margin-bottom: -5px;
+}
+
+.excellContainer {
+    position: relative;
+    float: right;
+}
+
+.paginationStyles {
+    /* display: flex; */
+    /* overflow-y: auto; */
+    width: 1000px;
+    height: 50px;
+    /* align-items: flex-end; */
+    /* float: right; */
+    /* border-style: solid;
+    border-color: black; */
+    padding: 0px;
+    margin-top: 5px;
+}
+
+.paginationSelect {
+    border-radius: 0.3;
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+    width: 50px !important;
+    height: 30px !important;
+    text-align: center;
+    /* align-items: center;
+    justify-content: center;
+    vertical-align: middle; */
+}
+
+.paginationTextElement {
+    height: 30px;
+    width: 30px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+}
+
+.paginationBoxesContainer {
+    display: flex;
+    float: right;
+    overflow-y: hidden;
+    overflow-x: auto;
+    width: auto;
+    height: 50px;
+    width: 400px;
+    padding: 0px;
+    position: initial;
+    padding: 3px;
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+}
+
+.inputFieldsContainer {
+    position: initial;
+    margin-left: 30px;
+}
+
+.timepicker {}
+
+.intervalStatusStyles {
+    margin-left: 5px;
+    margin-right: 35px;
+}
