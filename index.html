@@ -30,12 +30,33 @@
             <label for="picker">Interval status:</label>
             <input type="checkbox" id="intervalStatus" name="appt" value=false class="intervalStatusStyles">
             <label for="picker">From</label>
-            <input type="text" id="fromTimeValue" name="appt" value="00:00:00" class="timepicker" readonly=true >
+            <input type="text" id="fromTimeValue" name="appt" value="00:00:00" class="timepicker" readonly=true>
             <label for="picker">To</label>
-            <input type="text" id="toTimeValue" name="appt" value="00:00:00" class="timepicker" readonly=true >
+            <input type="text" id="toTimeValue" name="appt" value="00:00:00" class="timepicker" readonly=true>
         </div>
 
     </div>
+
+
+    <br>
+    <hr class="dividerStyles" />
+
+    <div class="sortingContainerStyles">
+
+
+        <h3>Sorting</h3>
+        <div class="sortingRadiosContainerStyles">
+            <input type="radio" id="asc" name="sort" value="asc" checked=true>
+            <label class="sortingRadioLabelStyles" for="asc">Ascending</label><br>
+            <input type="radio" id="dsc" name="sort" value="dsc">
+            <label class="sortingRadioLabelStyles" for="dsc">Descending</label><br>
+        </div>
+
+
+    </div>
+
+    <br>
+    <hr class="dividerStyles" />
 
 
     <br>
@@ -59,6 +80,10 @@
         </table>
     </div>
 
+    <br>
+    <br>
+
+    <button id="createOdMatrix">Create OD Matrix</button>
 
     <!-- <div id="pagination" class="paginationStyles">
         <div class="paginationBoxesContainer">

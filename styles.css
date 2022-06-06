@@ -100,3 +100,17 @@ td {
     margin-left: 5px;
     margin-right: 35px;
 }
+
+
+.sortingRadiosContainerStyles {
+    display: flex;
+}
+
+.dividerStyles {
+    width: 1000px;
+    float: left;
+}
+
+.sortingRadioLabelStyles {
+    margin-right: 25px;
+}
