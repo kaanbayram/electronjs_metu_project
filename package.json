@@ -2,19 +2,60 @@
   "name": "workspace_electron",
   "version": "1.0.0",
   "description": "electron app",
-  "main": "main.js",
+  "main": "src/main.js",
   "author": "kaanbayram",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^18.2.0"
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "electron-forge": "^5.2.4",
+    "electron-prebuilt-compile": "8.2.0"
   },
   "scripts": {
-    "start": "electron ."
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
   "dependencies": {
     "csvtojson": "^2.0.10",
+    "electron-compile": "^6.4.4",
+    "electron-squirrel-startup": "^1.0.0",
     "fs": "^0.0.1-security",
     "json2csv": "^5.0.7",
     "moment": "^2.29.3"
+  },
+  "config": {
+    "forge": {
+      "make_targets": {
+        "win32": [
+          "squirrel"
+        ],
+        "darwin": [
+          "zip"
+        ],
+        "linux": [
+          "deb",
+          "rpm"
+        ]
+      },
+      "electronPackagerConfig": {
+        "packageManager": "yarn",
+        "asar": true
+      },
+      "electronWinstallerConfig": {
+        "name": "workspace_electron"
+      },
+      "electronInstallerDebian": {},
+      "electronInstallerRedhat": {},
+      "github_repository": {
+        "owner": "",
+        "name": ""
+      },
+      "windowsStoreConfig": {
+        "packageName": "",
+        "name": "workspace_electron"
+      }
+    }
   }
 }

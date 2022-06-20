@@ -2,6 +2,6 @@
 	"version": "0.1.0",
 	"command": "electronjs_metu_project/node_modules/electron-prebuilt/dist/electron.exe",
 	"args": [
-		"lib/main.js"
+		"lib/src/main.js"
 	]
 }

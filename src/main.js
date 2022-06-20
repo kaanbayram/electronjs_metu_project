@@ -6,13 +6,12 @@ const createWindow = () => {
     height: 500,
     width: 800,
     webPreferences: {
-      preload: path.join(__dirname, "logics.js"),
+      preload: path.join(__dirname, "../logics.js"),
     },
   });
 
   win.maximize();
-  win.loadFile("index.html");
-  // win.webContents.openDevTools();
+  win.loadFile(path.join(__dirname, "index.html"));
 };
 
 

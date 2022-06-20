@@ -187,6 +187,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   async function onClickTwoDevice(evt) {
 
+
     const data = await csv().fromFile("input.csv");
     let newDataCollection = [];
     let firstPoint = document.getElementById("device1").value.toString();
