@@ -28,7 +28,11 @@ window.addEventListener("DOMContentLoaded", () => {
       "Second_Nreading",
       "Second_Staytime",
       "Second_Ttime",
-      "Time_diffrence"
+      "Time_diffrence",
+      "First_to_First_F2F",
+      "Last_to_Last_L2L",
+      "Mid_to_Mid_M2M",
+      "First_to_Last_F2L"
     ].forEach((value, index) => {
       let cell = rowElement.insertCell(index);
       cell.innerHTML = value.toString();
@@ -97,7 +101,7 @@ window.addEventListener("DOMContentLoaded", () => {
             "Second_Nreading": arr[index - 3].toString(),
             "Second_Staytime": arr[index - 2].toString(),
             "Second_Ttime": arr[index - 1].toString(),
-            "Time_diffrence": getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString())
+            "Time_diffrence": getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString()),
           };
 
           newDataCollection.push(row);
@@ -227,7 +231,11 @@ window.addEventListener("DOMContentLoaded", () => {
               "Second_Nreading": arr[index - 3].toString(),
               "Second_Staytime": arr[index - 2].toString(),
               "Second_Ttime": arr[index - 1].toString(),
-              "Time_diffrence": getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString())
+              "Time_diffrence": getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString()),
+              "First_to_First_F2F": getTravelTime("F2F", arr[index - 7].toString(), arr[index - 2].toString(), getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString())),
+              "Last_to_Last_L2L": getTravelTime("L2L", arr[index - 7].toString(), arr[index - 2].toString(), getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString())),
+              "Mid_to_Mid_M2M": getTravelTime("M2M", arr[index - 7].toString(), arr[index - 2].toString(), getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString())),
+              "First_to_Last_F2L": getTravelTime("F2L", arr[index - 7].toString(), arr[index - 2].toString(), getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString())),
             };
 
             tableDatas.push([
@@ -243,7 +251,11 @@ window.addEventListener("DOMContentLoaded", () => {
               arr[index - 3].toString(),
               arr[index - 2].toString(),
               arr[index - 1].toString(),
-              getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString())
+              getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString()),
+              getTravelTime("F2F", arr[index - 7].toString(), arr[index - 2].toString(), getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString())),
+              getTravelTime("L2L", arr[index - 7].toString(), arr[index - 2].toString(), getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString())),
+              getTravelTime("M2M", arr[index - 7].toString(), arr[index - 2].toString(), getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString())),
+              getTravelTime("F2L", arr[index - 7].toString(), arr[index - 2].toString(), getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString()))
             ]);
 
             newDataCollection.push(row);
@@ -271,7 +283,11 @@ window.addEventListener("DOMContentLoaded", () => {
               "Second_Nreading": arr[index - 3].toString(),
               "Second_Staytime": arr[index - 2].toString(),
               "Second_Ttime": arr[index - 1].toString(),
-              "Time_diffrence": getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString())
+              "Time_diffrence": getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString()),
+              "First_to_First_F2F": getTravelTime("F2F", arr[index - 7].toString(), arr[index - 2].toString(), getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString())),
+              "Last_to_Last_L2L": getTravelTime("L2L", arr[index - 7].toString(), arr[index - 2].toString(), getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString())),
+              "Mid_to_Mid_M2M": getTravelTime("M2M", arr[index - 7].toString(), arr[index - 2].toString(), getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString())),
+              "First_to_Last_F2L": getTravelTime("F2L", arr[index - 7].toString(), arr[index - 2].toString(), getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString())),
             };
 
             tableDatas.push([
@@ -287,7 +303,11 @@ window.addEventListener("DOMContentLoaded", () => {
               arr[index - 3].toString(),
               arr[index - 2].toString(),
               arr[index - 1].toString(),
-              getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString())
+              getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString()),
+              getTravelTime("F2F", arr[index - 7].toString(), arr[index - 2].toString(), getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString())),
+              getTravelTime("L2L", arr[index - 7].toString(), arr[index - 2].toString(), getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString())),
+              getTravelTime("M2M", arr[index - 7].toString(), arr[index - 2].toString(), getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString())),
+              getTravelTime("F2L", arr[index - 7].toString(), arr[index - 2].toString(), getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString()))
             ]);
 
             newDataCollection.push(row);
@@ -350,7 +370,11 @@ window.addEventListener("DOMContentLoaded", () => {
         "Second_Nreading",
         "Second_Staytime",
         "Second_Ttime",
-        "Time_diffrence"
+        "Time_diffrence",
+        "First_to_First_F2F",
+        "Last_to_Last_L2L",
+        "Mid_to_Mid_M2M",
+        "First_to_Last_F2L"
       ]
     }).parse((sortedExcellData));
 
@@ -360,6 +384,28 @@ window.addEventListener("DOMContentLoaded", () => {
     willExportGridData = newDataCsv;
 
     // fs.writeFileSync("newDataCsv.csv", newDataCsv);
+  }
+
+  function getTravelTime(travelType, first_Staytime, second_Staytime, second_Ttime) {
+    const _first_Staytime = first_Staytime === "NA" ? 0 : Number(first_Staytime);
+    const _second_Staytime = second_Staytime === "NA" ? 0 : Number(second_Staytime);
+
+    switch (travelType) {
+      case "F2F": {
+        return moment(second_Ttime, "HH:mm:ss").add(_first_Staytime, 'seconds').format("HH:mm:ss")
+      }
+      case "L2L": {
+        return moment(second_Ttime, "HH:mm:ss").add(_second_Staytime, 'seconds').format("HH:mm:ss")
+      }
+      case "M2M": {
+        return moment(second_Ttime, "HH:mm:ss").add(((_first_Staytime + _second_Staytime) / 2), 'seconds').format("HH:mm:ss")
+      }
+      case "F2L": {
+        return moment(second_Ttime, "HH:mm:ss").add(((_first_Staytime + _second_Staytime) / 2), 'seconds').format("HH:mm:ss")
+      }
+      default:
+        return second_Ttime;
+    }
   }
 
   function getTimeDifference(startTime, endTime) {
