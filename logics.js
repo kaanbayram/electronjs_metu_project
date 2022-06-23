@@ -32,7 +32,10 @@ window.addEventListener("DOMContentLoaded", () => {
       "First_to_First_F2F",
       "Last_to_Last_L2L",
       "Mid_to_Mid_M2M",
-      "First_to_Last_F2L"
+      "First_to_Last_F2L",
+      "Distance",
+      "Velocity - m/s",
+      "Velocity - km/h"
     ].forEach((value, index) => {
       let cell = rowElement.insertCell(index);
       cell.innerHTML = value.toString();
@@ -193,6 +196,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
 
     const data = await csv().fromFile("input.csv");
+    const distanceData = await csv().fromFile("distanceMatrix.csv");
+
     let newDataCollection = [];
     let firstPoint = document.getElementById("device1").value.toString();
     let secondPoint = document.getElementById("device2").value.toString();
@@ -218,6 +223,39 @@ window.addEventListener("DOMContentLoaded", () => {
 
           if (arr[index - 10].toString() === firstPoint && arr[index - 5].toString() === secondPoint && !document.getElementById("intervalStatus").checked) {  // Interval Inactive
 
+
+            const distances = getDistances(distanceData);
+            const distanceMatrixBTRarray = distances[0];
+
+            const verticalIndex = distanceMatrixBTRarray.findIndex((btr) => btr === arr[index - 10].toString()); // from
+            const horizontalIndex = distanceMatrixBTRarray.findIndex((btr) => btr === arr[index - 5].toString());  // to
+            let distance = "";
+            let velocity = "";
+            let velocityKm = "";
+
+            if (verticalIndex > -1 && horizontalIndex > -1) {
+
+              distance = distances[verticalIndex][horizontalIndex];
+
+              let _first_Staytime = arr[index - 7].toString();
+              let _second_Staytime = arr[index - 2].toString();
+
+              _first_Staytime = _first_Staytime === "NA" ? 0 : Number(_first_Staytime);
+              _second_Staytime = _second_Staytime === "NA" ? 0 : Number(_second_Staytime);
+
+
+
+              velocity = (Number(distance) / (Number(arr[index - 1]) + ((_first_Staytime + _second_Staytime) / 2)));
+              velocity = velocity.toString().includes(".") ? velocity.toFixed(4).toString() : velocity.toString();
+
+              velocityKm = velocity * (3600 / 1000);
+              velocityKm = velocityKm.toString().includes(".") ? velocityKm.toFixed(4).toString() : velocityKm.toString();
+
+              console.log(_first_Staytime, _second_Staytime, (_first_Staytime + _second_Staytime), Number(distance), velocity, velocityKm);
+
+            }
+
+
             let row = {
               "MACID": deviceMAC,
               "Devicetype": deviceType,
@@ -232,10 +270,13 @@ window.addEventListener("DOMContentLoaded", () => {
               "Second_Staytime": arr[index - 2].toString(),
               "Second_Ttime": arr[index - 1].toString(),
               "Time_diffrence": getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString()),
-              "First_to_First_F2F": getTravelTime("F2F", arr[index - 7].toString(), arr[index - 2].toString(), getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString())),
-              "Last_to_Last_L2L": getTravelTime("L2L", arr[index - 7].toString(), arr[index - 2].toString(), getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString())),
-              "Mid_to_Mid_M2M": getTravelTime("M2M", arr[index - 7].toString(), arr[index - 2].toString(), getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString())),
-              "First_to_Last_F2L": getTravelTime("F2L", arr[index - 7].toString(), arr[index - 2].toString(), getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString())),
+              "First_to_First_F2F": getTravelTime("F2F", arr[index - 7].toString(), arr[index - 2].toString(), arr[index - 1].toString()),
+              "Last_to_Last_L2L": getTravelTime("L2L", arr[index - 7].toString(), arr[index - 2].toString(), arr[index - 1].toString()),
+              "Mid_to_Mid_M2M": getTravelTime("M2M", arr[index - 7].toString(), arr[index - 2].toString(), arr[index - 1].toString()),
+              "First_to_Last_F2L": getTravelTime("F2L", arr[index - 7].toString(), arr[index - 2].toString(), arr[index - 1].toString()),
+              "Distance": distance,
+              "Velocity - m/s": velocity,
+              "Velocity - km/h": velocityKm
             };
 
             tableDatas.push([
@@ -252,10 +293,13 @@ window.addEventListener("DOMContentLoaded", () => {
               arr[index - 2].toString(),
               arr[index - 1].toString(),
               getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString()),
-              getTravelTime("F2F", arr[index - 7].toString(), arr[index - 2].toString(), getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString())),
-              getTravelTime("L2L", arr[index - 7].toString(), arr[index - 2].toString(), getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString())),
-              getTravelTime("M2M", arr[index - 7].toString(), arr[index - 2].toString(), getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString())),
-              getTravelTime("F2L", arr[index - 7].toString(), arr[index - 2].toString(), getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString()))
+              getTravelTime("F2F", arr[index - 7].toString(), arr[index - 2].toString(), arr[index - 1].toString()),
+              getTravelTime("L2L", arr[index - 7].toString(), arr[index - 2].toString(), arr[index - 1].toString()),
+              getTravelTime("M2M", arr[index - 7].toString(), arr[index - 2].toString(), arr[index - 1].toString()),
+              getTravelTime("F2L", arr[index - 7].toString(), arr[index - 2].toString(), arr[index - 1].toString()),
+              distance,
+              velocity,
+              velocityKm
             ]);
 
             newDataCollection.push(row);
@@ -269,6 +313,17 @@ window.addEventListener("DOMContentLoaded", () => {
             moment(arr[index - 4].toString(), 'HH:mm:ss').isSameOrBefore(moment(document.getElementById('toTimeValue').value.toString(), 'HH:mm:ss'))  // second time interval bitişten kucuk mu
           ) {
 
+            const distances = getDistances(distanceData);
+            const distanceMatrixBTRarray = distances[0];
+
+            const verticalIndex = distanceMatrixBTRarray.findIndex((btr) => btr === arr[index - 10].toString()); // from
+            const horizontalIndex = distanceMatrixBTRarray.findIndex((btr) => btr === arr[index - 5].toString());  // to
+            let distance = "";
+            let velocity = "";
+
+            if (verticalIndex > -1 && horizontalIndex > -1) {
+              distance = distances[verticalIndex][horizontalIndex];
+            }
 
             let row = {
               "MACID": deviceMAC,
@@ -284,10 +339,13 @@ window.addEventListener("DOMContentLoaded", () => {
               "Second_Staytime": arr[index - 2].toString(),
               "Second_Ttime": arr[index - 1].toString(),
               "Time_diffrence": getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString()),
-              "First_to_First_F2F": getTravelTime("F2F", arr[index - 7].toString(), arr[index - 2].toString(), getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString())),
-              "Last_to_Last_L2L": getTravelTime("L2L", arr[index - 7].toString(), arr[index - 2].toString(), getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString())),
-              "Mid_to_Mid_M2M": getTravelTime("M2M", arr[index - 7].toString(), arr[index - 2].toString(), getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString())),
-              "First_to_Last_F2L": getTravelTime("F2L", arr[index - 7].toString(), arr[index - 2].toString(), getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString())),
+              "First_to_First_F2F": getTravelTime("F2F", arr[index - 7].toString(), arr[index - 2].toString(), arr[index - 1].toString()),
+              "Last_to_Last_L2L": getTravelTime("L2L", arr[index - 7].toString(), arr[index - 2].toString(), arr[index - 1].toString()),
+              "Mid_to_Mid_M2M": getTravelTime("M2M", arr[index - 7].toString(), arr[index - 2].toString(), arr[index - 1].toString()),
+              "First_to_Last_F2L": getTravelTime("F2L", arr[index - 7].toString(), arr[index - 2].toString(), arr[index - 1].toString()),
+              "Distance": distance,
+              "Velocity": velocity,
+              "Velocity - km/h": velocityKm
             };
 
             tableDatas.push([
@@ -304,10 +362,13 @@ window.addEventListener("DOMContentLoaded", () => {
               arr[index - 2].toString(),
               arr[index - 1].toString(),
               getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString()),
-              getTravelTime("F2F", arr[index - 7].toString(), arr[index - 2].toString(), getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString())),
-              getTravelTime("L2L", arr[index - 7].toString(), arr[index - 2].toString(), getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString())),
-              getTravelTime("M2M", arr[index - 7].toString(), arr[index - 2].toString(), getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString())),
-              getTravelTime("F2L", arr[index - 7].toString(), arr[index - 2].toString(), getTimeDifference(arr[index - 9].toString(), arr[index - 4].toString()))
+              getTravelTime("F2F", arr[index - 7].toString(), arr[index - 2].toString(), arr[index - 1].toString()),
+              getTravelTime("L2L", arr[index - 7].toString(), arr[index - 2].toString(), arr[index - 1].toString()),
+              getTravelTime("M2M", arr[index - 7].toString(), arr[index - 2].toString(), arr[index - 1].toString()),
+              getTravelTime("F2L", arr[index - 7].toString(), arr[index - 2].toString(), arr[index - 1].toString()),
+              distance,
+              velocity,
+              velocityKm
             ]);
 
             newDataCollection.push(row);
@@ -374,7 +435,8 @@ window.addEventListener("DOMContentLoaded", () => {
         "First_to_First_F2F",
         "Last_to_Last_L2L",
         "Mid_to_Mid_M2M",
-        "First_to_Last_F2L"
+        "First_to_Last_F2L",
+        "Distance"
       ]
     }).parse((sortedExcellData));
 
@@ -389,23 +451,32 @@ window.addEventListener("DOMContentLoaded", () => {
   function getTravelTime(travelType, first_Staytime, second_Staytime, second_Ttime) {
     const _first_Staytime = first_Staytime === "NA" ? 0 : Number(first_Staytime);
     const _second_Staytime = second_Staytime === "NA" ? 0 : Number(second_Staytime);
+    const _second_Ttime = Number(second_Ttime);
+    let calculus = 0;
 
     switch (travelType) {
       case "F2F": {
-        return moment(second_Ttime, "HH:mm:ss").add(_first_Staytime, 'seconds').format("HH:mm:ss")
+        calculus = _second_Ttime + _first_Staytime;
+        break;
       }
       case "L2L": {
-        return moment(second_Ttime, "HH:mm:ss").add(_second_Staytime, 'seconds').format("HH:mm:ss")
+        calculus = _second_Ttime + _second_Staytime;
+        break;
       }
       case "M2M": {
-        return moment(second_Ttime, "HH:mm:ss").add(((_first_Staytime + _second_Staytime) / 2), 'seconds').format("HH:mm:ss")
+        calculus = _second_Ttime + ((_first_Staytime + _second_Staytime) / 2);
+        break;
       }
       case "F2L": {
-        return moment(second_Ttime, "HH:mm:ss").add(((_first_Staytime + _second_Staytime) / 2), 'seconds').format("HH:mm:ss")
+        calculus = _second_Ttime + _first_Staytime + _second_Staytime;
+        break;
       }
       default:
-        return second_Ttime;
+        calculus = _second_Ttime;
+        break;
     }
+
+    return moment.utc(calculus * 1000).format('HH:mm:ss');
   }
 
   function getTimeDifference(startTime, endTime) {
@@ -446,6 +517,27 @@ window.addEventListener("DOMContentLoaded", () => {
       document.getElementById('fromTimeValue').value = "00:00:00";
       document.getElementById('toTimeValue').value = "00:00:00";
     }
+  }
+
+  function getDistances(data) {
+
+
+    const newMatrix = [];
+    data.forEach((row) => {
+      newMatrix.push(Object.values(row)[0].split(";"));
+    })
+
+    const columnHeaders = [];
+
+    newMatrix.forEach((_row) => {
+      columnHeaders.push(_row[0]);
+    });
+
+    columnHeaders.unshift("_");
+
+    newMatrix.unshift(columnHeaders);
+
+    return newMatrix;
   }
 
   // document.getElementById('calculateButton').addEventListener('click', onClickCalculate, false);
