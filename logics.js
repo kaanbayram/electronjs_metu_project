@@ -20,6 +20,7 @@ window.addEventListener("DOMContentLoaded", () => {
       "Devicetype",
       "First_BTRID",
       "First_Time",
+      "First_Time_Seconds",
       "First_Nreading",
       "First_Staytime",
       "First_Ttime",
@@ -34,8 +35,7 @@ window.addEventListener("DOMContentLoaded", () => {
       "Mid_to_Mid_M2M",
       "First_to_Last_F2L",
       "Distance",
-      "Velocity - m/s",
-      "Velocity - km/h"
+      "Velocity_km/h"
     ].forEach((value, index) => {
       let cell = rowElement.insertCell(index);
       cell.innerHTML = value.toString();
@@ -96,6 +96,7 @@ window.addEventListener("DOMContentLoaded", () => {
             "Devicetype": deviceType,
             "First_BTRID": arr[index - 10].toString(),
             "First_Time": arr[index - 9].toString(),
+            "First_Time_Seconds": moment(arr[index - 9].toString(), 'HH:mm:ss').diff(moment().startOf('day'), 'seconds'),
             "First_Nreading": arr[index - 8].toString(),
             "First_Staytime": arr[index - 7].toString(),
             "First_Ttime": arr[index - 6].toString(),
@@ -251,7 +252,7 @@ window.addEventListener("DOMContentLoaded", () => {
               velocityKm = velocity * (3600 / 1000);
               velocityKm = velocityKm.toString().includes(".") ? velocityKm.toFixed(4).toString() : velocityKm.toString();
 
-              console.log(_first_Staytime, _second_Staytime, (_first_Staytime + _second_Staytime), Number(distance), velocity, velocityKm);
+              // console.log(_first_Staytime, _second_Staytime, (_first_Staytime + _second_Staytime), Number(distance), velocity, velocityKm);
 
             }
 
@@ -261,6 +262,7 @@ window.addEventListener("DOMContentLoaded", () => {
               "Devicetype": deviceType,
               "First_BTRID": arr[index - 10].toString(),
               "First_Time": arr[index - 9].toString(),
+              "First_Time_Seconds": moment(arr[index - 9].toString(), 'HH:mm:ss').diff(moment().startOf('day'), 'seconds'),
               "First_Nreading": arr[index - 8].toString(),
               "First_Staytime": arr[index - 7].toString(),
               "First_Ttime": arr[index - 6].toString(),
@@ -275,8 +277,7 @@ window.addEventListener("DOMContentLoaded", () => {
               "Mid_to_Mid_M2M": getTravelTime("M2M", arr[index - 7].toString(), arr[index - 2].toString(), arr[index - 1].toString()),
               "First_to_Last_F2L": getTravelTime("F2L", arr[index - 7].toString(), arr[index - 2].toString(), arr[index - 1].toString()),
               "Distance": distance,
-              "Velocity - m/s": velocity,
-              "Velocity - km/h": velocityKm
+              "Velocity_km/h": velocityKm.replace(".", ",")
             };
 
             tableDatas.push([
@@ -284,6 +285,7 @@ window.addEventListener("DOMContentLoaded", () => {
               deviceType,
               arr[index - 10].toString(),
               arr[index - 9].toString(),
+              moment(arr[index - 9].toString(), 'HH:mm:ss').diff(moment().startOf('day'), 'seconds'),
               arr[index - 8].toString(),
               arr[index - 7].toString(),
               arr[index - 6].toString(),
@@ -298,8 +300,7 @@ window.addEventListener("DOMContentLoaded", () => {
               getTravelTime("M2M", arr[index - 7].toString(), arr[index - 2].toString(), arr[index - 1].toString()),
               getTravelTime("F2L", arr[index - 7].toString(), arr[index - 2].toString(), arr[index - 1].toString()),
               distance,
-              velocity,
-              velocityKm
+              velocityKm.replace(".", ","),
             ]);
 
             newDataCollection.push(row);
@@ -320,16 +321,35 @@ window.addEventListener("DOMContentLoaded", () => {
             const horizontalIndex = distanceMatrixBTRarray.findIndex((btr) => btr === arr[index - 5].toString());  // to
             let distance = "";
             let velocity = "";
+            let velocityKm = "";
 
             if (verticalIndex > -1 && horizontalIndex > -1) {
-              distance = distances[verticalIndex][horizontalIndex];
-            }
 
+              distance = distances[verticalIndex][horizontalIndex];
+
+              let _first_Staytime = arr[index - 7].toString();
+              let _second_Staytime = arr[index - 2].toString();
+
+              _first_Staytime = _first_Staytime === "NA" ? 0 : Number(_first_Staytime);
+              _second_Staytime = _second_Staytime === "NA" ? 0 : Number(_second_Staytime);
+
+
+
+              velocity = (Number(distance) / (Number(arr[index - 1]) + ((_first_Staytime + _second_Staytime) / 2)));
+              velocity = velocity.toString().includes(".") ? velocity.toFixed(4).toString() : velocity.toString();
+
+              velocityKm = velocity * (3600 / 1000);
+              velocityKm = velocityKm.toString().includes(".") ? velocityKm.toFixed(4).toString() : velocityKm.toString();
+
+              // console.log(_first_Staytime, _second_Staytime, (_first_Staytime + _second_Staytime), Number(distance), velocity, velocityKm);
+
+            }
             let row = {
               "MACID": deviceMAC,
               "Devicetype": deviceType,
               "First_BTRID": arr[index - 10].toString(),
               "First_Time": arr[index - 9].toString(),
+              "First_Time_Seconds": moment(arr[index - 9].toString(), 'HH:mm:ss').diff(moment().startOf('day'), 'seconds'),
               "First_Nreading": arr[index - 8].toString(),
               "First_Staytime": arr[index - 7].toString(),
               "First_Ttime": arr[index - 6].toString(),
@@ -344,8 +364,7 @@ window.addEventListener("DOMContentLoaded", () => {
               "Mid_to_Mid_M2M": getTravelTime("M2M", arr[index - 7].toString(), arr[index - 2].toString(), arr[index - 1].toString()),
               "First_to_Last_F2L": getTravelTime("F2L", arr[index - 7].toString(), arr[index - 2].toString(), arr[index - 1].toString()),
               "Distance": distance,
-              "Velocity": velocity,
-              "Velocity - km/h": velocityKm
+              "Velocity_km/h": velocityKm.replace(".", ",")
             };
 
             tableDatas.push([
@@ -353,6 +372,7 @@ window.addEventListener("DOMContentLoaded", () => {
               deviceType,
               arr[index - 10].toString(),
               arr[index - 9].toString(),
+              moment(arr[index - 9].toString(), 'HH:mm:ss').diff(moment().startOf('day'), 'seconds'),
               arr[index - 8].toString(),
               arr[index - 7].toString(),
               arr[index - 6].toString(),
@@ -367,8 +387,7 @@ window.addEventListener("DOMContentLoaded", () => {
               getTravelTime("M2M", arr[index - 7].toString(), arr[index - 2].toString(), arr[index - 1].toString()),
               getTravelTime("F2L", arr[index - 7].toString(), arr[index - 2].toString(), arr[index - 1].toString()),
               distance,
-              velocity,
-              velocityKm
+              velocityKm.replace(".", ",")
             ]);
 
             newDataCollection.push(row);
@@ -423,6 +442,7 @@ window.addEventListener("DOMContentLoaded", () => {
         "Devicetype",
         "First_BTRID",
         "First_Time",
+        "First_Time_Seconds",
         "First_Nreading",
         "First_Staytime",
         "First_Ttime",
@@ -436,7 +456,8 @@ window.addEventListener("DOMContentLoaded", () => {
         "Last_to_Last_L2L",
         "Mid_to_Mid_M2M",
         "First_to_Last_F2L",
-        "Distance"
+        "Distance",
+        "Velocity_km/h"
       ]
     }).parse((sortedExcellData));
 
@@ -476,7 +497,8 @@ window.addEventListener("DOMContentLoaded", () => {
         break;
     }
 
-    return moment.utc(calculus * 1000).format('HH:mm:ss');
+    // return moment.utc(calculus * 1000).format('HH:mm:ss');
+    return calculus.toString().replace(".", ",");
   }
 
   function getTimeDifference(startTime, endTime) {
